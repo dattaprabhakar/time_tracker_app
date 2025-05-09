@@ -1,0 +1,5 @@
+/* Add any custom styles here */
+.activity-feed .card-body img {
+    max-width: 100%;
+    border: 1px solid #ddd;
+}

@@ -1,0 +1,5 @@
+Flask
+pymongo
+python-dotenv # For managing environment variables
+bcrypt # For password hashing
+Flask-Login # For session management

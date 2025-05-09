@@ -1,0 +1,5 @@
+mss
+opencv-python
+requests
+schedule # For easier job scheduling
+python-dotenv # To load config

@@ -1,0 +1,66 @@
+{% extends "_base.html" %}
+
+{% block title %}Dashboard - Time Tracker{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Employee Activity Dashboard</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <h4>Employees</h4>
+        <form method="GET" action="{{ url_for('dashboard') }}">
+            <div class="mb-3">
+                <label for="employee_id_select" class="form-label">Select Employee:</label>
+                <select name="employee_id" id="employee_id_select" class="form-select" onchange="this.form.submit()">
+                    <option value="">-- Select --</option>
+                    {% for emp_id in employee_ids %}
+                    <option value="{{ emp_id }}" {% if emp_id == selected_employee_id %}selected{% endif %}>{{ emp_id }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+        {% if not employee_ids %}
+        <p>No employee data yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="col-md-9">
+        <h4>Activity Feed for {{ selected_employee_id or "N/A" }}</h4>
+        {% if selected_employee_id %}
+            {% if activities %}
+            <div class="activity-feed">
+                {% for activity in activities %}
+                <div class="card mb-3">
+                    <div class="card-header">
+                        {{ activity.type|capitalize }} - {{ activity.timestamp_str }}
+                    </div>
+                    <div class="card-body text-center">
+                        {% if activity.image_data_b64 %} {# For screenshots #}
+                        <img src="data:image/jpeg;base64,{{ activity.image_data_b64 }}" alt="{{ activity.type }}" class="img-fluid" style="max-height: 400px; object-fit: contain;">
+                        {% elif activity.frame_data_b64 %} {# For video frames #}
+                        <img src="data:image/jpeg;base64,{{ activity.frame_data_b64 }}" alt="{{ activity.type }}" class="img-fluid" style="max-height: 400px; object-fit: contain;">
+                        {% else %}
+                        <p>No image data found for this entry.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No activity found for this employee.</p>
+            {% endif %}
+        {% else %}
+        <p>Please select an employee to view their activity.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Add any dashboard-specific JavaScript here if needed
+// For example, auto-refreshing content (though this might be heavy with images)
+</script>
+{% endblock %}
